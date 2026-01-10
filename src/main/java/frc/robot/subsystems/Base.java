@@ -82,7 +82,7 @@ public class Base extends SubsystemBase {
      * <p>
      * Example: "9R"
      */
-    private final Map<String, PathPlannerPath> m_reefFinalApproachPaths;
+    //private final Map<String, PathPlannerPath> m_reefFinalApproachPaths;
 
     /**
      * 0: left camera (station)
@@ -99,14 +99,14 @@ public class Base extends SubsystemBase {
         m_gyro.getConfigurator().apply(new Pigeon2Configuration());
         m_gyro.setYaw(0);
 
-        Optional<RobotConfig> robotConfig;
+        // Optional<RobotConfig> robotConfig;
 
-        try {
-            robotConfig = Optional.of(RobotConfig.fromGUISettings());
-        } catch (Exception e) {
-            robotConfig = Optional.empty();
-            e.printStackTrace();
-        }
+        // try {
+        //     robotConfig = Optional.of(RobotConfig.fromGUISettings());
+        // } catch (Exception e) {
+        //     robotConfig = Optional.empty();
+        //     e.printStackTrace();
+        // }
 
         m_swerveMods = new SwerveModule[] {
                 new SwerveModule(0, DriveConstants.Mod0.constants),
@@ -135,35 +135,34 @@ public class Base extends SubsystemBase {
         SmartDashboard.putData("Robot Measurement", m_robotField);
         SmartDashboard.putData("Target Pose", m_targetField);
 
-        AutoBuilder.configure(this::getPose, // Robot pose supplier
-                this::setPose, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                (speeds, feedforwards) ->
+        // AutoBuilder.configure(this::getPose, // Robot pose supplier
+        //         this::setPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        //         this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        //         (speeds, feedforwards) ->
 
-                driveRobotRelativeChassisSpeeds(speeds), // Method that will drive the robot
-                                                         // given ROBOT RELATIVE
-                                                         // ChassisSpeeds. Also optionally
-                                                         // outputs individual module
-                                                         // feedforwards
-                new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for
-                                                // holonomic drive trains
-                        new PIDConstants(AutoConstants.driveKP, AutoConstants.driveKI, AutoConstants.driveKD), // Translation
-                                                                                                               // PID
-                                                                                                               // constants
-                        new PIDConstants(AutoConstants.turnKP, AutoConstants.turnKI, AutoConstants.turnKD) // Rotation
-                                                                                                           // PID
-                                                                                                           // constants
-                ),
-                robotConfig.get(), // The robot configuration
-                this::shouldPathsFlip,
-                this // Reference to this subsystem to set requirements
-        );
+        //         driveRobotRelativeChassisSpeeds(speeds), // Method that will drive the robot
+        //                                                  // given ROBOT RELATIVE
+        //                                                  // ChassisSpeeds. Also optionally
+        //                                                  // outputs individual module
+        //                                                  // feedforwards
+        //         new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for
+        //                                         // holonomic drive trains
+        //                 new PIDConstants(AutoConstants.driveKP, AutoConstants.driveKI, AutoConstants.driveKD), // Translation
+        //                                                                                                        // PID
+        //                                                                                                        // constants
+        //                 new PIDConstants(AutoConstants.turnKP, AutoConstants.turnKI, AutoConstants.turnKD) // Rotation
+        //                                                                                                    // PID
+        //                                                                                                    // constants
+        //         ),
+        //         robotConfig.get(), // The robot configuration
+        //         this::shouldPathsFlip,
+        //         this // Reference to this subsystem to set requirements
+        // );
         m_drivingInFieldRelative = true;
         m_gyro.reset();
 
         m_reefFinalPositions = new HashMap<>();
-        m_reefFinalApproachPaths = new HashMap<>();
-        initializeReefPositionsAndPaths();
+
         // test april tag targets
         for (var tagID : ReefConstants.aprilTagIDs) {
             String strID = Integer.toString(tagID);
@@ -192,59 +191,6 @@ public class Base extends SubsystemBase {
 
     public void setIntakingFlag(boolean newValue) {
         m_currentlyIntaking = newValue;
-    }
-
-    private void initializeReefPositionsAndPaths() {
-        for (var tagID : ReefConstants.aprilTagIDs) {
-            var oTagPose = FieldConstants.kFieldLayout.getTagPose(tagID);
-            if (oTagPose.isPresent()) {
-                var tagPose2d = oTagPose.get().toPose2d();
-                // left
-                var leftOffset = ReefConstants.kLeftOffsetFromTagFinalPosition
-                        .rotateBy(tagPose2d.getRotation());
-                var leftTargetPose = new Pose2d(tagPose2d.getTranslation().plus(leftOffset),
-                        tagPose2d.getRotation().minus(ReefConstants.kScoringRotationOffset));
-                m_reefFinalPositions.put(tagID + "L", leftTargetPose);
-
-                // right
-                var rightOffset = ReefConstants.kRightOffsetFromTagFinalPosition
-                        .rotateBy(tagPose2d.getRotation());
-                var rightTargetPose = new Pose2d(tagPose2d.getTranslation().plus(rightOffset),
-                        tagPose2d.getRotation().minus(ReefConstants.kScoringRotationOffset));
-                m_reefFinalPositions.put(tagID + "R", rightTargetPose);
-
-                var finalApproachStartPoint = ReefConstants.kFinalApproachOffset.rotateBy(tagPose2d.getRotation());
-
-                // left
-                var leftStartPoint = new Pose2d(leftTargetPose.getTranslation().plus(finalApproachStartPoint),
-                        tagPose2d.getRotation().minus(ReefConstants.kScoringRotationOffset));
-                var leftApproachPath = new PathPlannerPath(
-                        PathPlannerPath.waypointsFromPoses(
-                                new Pose2d(leftStartPoint.getTranslation(), tagPose2d.getRotation()),
-                                new Pose2d(leftTargetPose.getTranslation(), tagPose2d.getRotation())),
-                        new PathConstraints(DriveConstants.kReefApproachMaxSpeed, DriveConstants.kReefApproachMaxAccel,
-                                DriveConstants.kReefApproachMaxRotateSpeed, DriveConstants.kReefApproachMaxRotateAccel),
-                        new IdealStartingState(DriveConstants.kReefStartApproachDesiredSpeed,
-                                leftTargetPose.getRotation()),
-                        new GoalEndState(0.0, leftTargetPose.getRotation()));
-                leftApproachPath.preventFlipping = true;
-                m_reefFinalApproachPaths.put(tagID + "L", leftApproachPath);
-
-                var rightStartPoint = new Pose2d(rightTargetPose.getTranslation().plus(finalApproachStartPoint),
-                        tagPose2d.getRotation().minus(ReefConstants.kScoringRotationOffset));
-                var rightApproachPath = new PathPlannerPath(
-                        PathPlannerPath.waypointsFromPoses(
-                                new Pose2d(rightStartPoint.getTranslation(), tagPose2d.getRotation()),
-                                new Pose2d(rightTargetPose.getTranslation(), tagPose2d.getRotation())),
-                        new PathConstraints(DriveConstants.kReefApproachMaxSpeed, DriveConstants.kReefApproachMaxAccel,
-                                DriveConstants.kReefApproachMaxRotateSpeed, DriveConstants.kReefApproachMaxRotateAccel),
-                        new IdealStartingState(DriveConstants.kReefStartApproachDesiredSpeed,
-                                rightTargetPose.getRotation()),
-                        new GoalEndState(0.0, rightTargetPose.getRotation()));
-                rightApproachPath.preventFlipping = true;
-                m_reefFinalApproachPaths.put(tagID + "R", rightApproachPath);
-            }
-        }
     }
 
     public void drive(Translation2d translation, double rotation, boolean isOpenLoop) {
@@ -511,9 +457,5 @@ public class Base extends SubsystemBase {
 
     public Pose2d getTargetPose(int tagID, String side) {
         return m_reefFinalPositions.getOrDefault(tagID + side, null);
-    }
-
-    public PathPlannerPath getReefApproachPath(int tagID, String side) {
-        return m_reefFinalApproachPaths.getOrDefault(tagID + side, null);
     }
 }

@@ -14,7 +14,7 @@ public class Led extends SubsystemBase {
     private AddressableLED m_led;
     public AddressableLEDBuffer m_buffer;
 
-    public Led(CoralTool coralTool) {
+    public Led() {
         // LEDPattern.solid(Color.kOrange).blink(Second.of(0.25));
         // LEDPattern.rainbow(100, 100).scrollAtRelativeSpeed(Hertz.of(.5));
         m_led = new AddressableLED(LedConstants.kPwmPort);
@@ -22,7 +22,7 @@ public class Led extends SubsystemBase {
         m_led.setLength(LedConstants.kNumLeds);
         m_led.start();
 
-        setDefaultCommand(new DisabledLedPattern(this, coralTool));
+        setDefaultCommand(new DisabledLedPattern(this));
     }
 
     @Override

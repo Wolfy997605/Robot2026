@@ -31,27 +31,9 @@ import frc.robot.Constants.TunnelCageConstants;
 import frc.robot.Constants.ElevatorConstants.StageLevel;
 import frc.robot.Constants.FieldConstants.ReefConstants.TargetSide;
 import frc.robot.Constants.TunnelCageConstants.PinPosition;
-import frc.robot.commands.AlignToReef;
-import frc.robot.commands.AutoIntake;
-import frc.robot.commands.ClimbCage;
-import frc.robot.commands.CoralToolAutomaticInit;
-import frc.robot.commands.DropAtLevel;
-import frc.robot.commands.EjectCoral;
-import frc.robot.commands.ElevatorAutomaticInit;
-import frc.robot.commands.IntakeCoral;
-import frc.robot.commands.LoadFromStation;
-import frc.robot.commands.LockIntoCage;
-import frc.robot.commands.MoveCageIntoPlace;
-import frc.robot.commands.RemoveAlgae;
-import frc.robot.commands.StowSubsystems;
-import frc.robot.commands.TunnelCageAutomaticInit;
-import frc.robot.subsystems.AlgaeTool;
+
 import frc.robot.subsystems.Base;
-import frc.robot.subsystems.CoralTool;
-import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Led;
-import frc.robot.subsystems.ManipulatorWheels;
-import frc.robot.subsystems.TunnelCage;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -70,7 +52,7 @@ public class RobotContainer {
     private final CommandJoystick m_throttleStick = new CommandJoystick(DriveConstants.kThrottleStickID);
 
     private double driverMulti = 1;
-    private final SendableChooser<Command> m_chooser;
+    //private final SendableChooser<Command> m_chooser;
 
     // /* Subsystems */
     private Base m_base;
@@ -87,8 +69,8 @@ public class RobotContainer {
 
         registerNamedCommands();
 
-        m_chooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("AutoChooser", m_chooser);
+        // m_chooser = AutoBuilder.buildAutoChooser();
+        // SmartDashboard.putData("AutoChooser", m_chooser);
 
         configureButtonBindings();
     }
@@ -163,11 +145,11 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        // return new exampleAuto(m_base);
-        return m_chooser.getSelected();
-    }
+    // public Command getAutonomousCommand() {
+    //     // An ExampleCommand will run in autonomous
+    //     // return new exampleAuto(m_base);
+    //     return m_chooser.getSelected();
+    // }
 
     public void resetGyroOffsetEstimatedPose() {
         m_base.resetGyroOffset(true);
