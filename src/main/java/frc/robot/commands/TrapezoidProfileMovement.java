@@ -57,7 +57,7 @@ public class TrapezoidProfileMovement extends Command {
     }
 
     private void setState(TrapezoidProfile.State current) {
-        controller.setReference(current.position, ControlType.kPosition,
+        controller.setSetpoint(current.position, ControlType.kPosition,
                 closedLoopSlot,
                 feedForward.get());
     }

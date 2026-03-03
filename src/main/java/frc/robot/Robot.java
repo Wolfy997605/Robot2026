@@ -7,11 +7,9 @@ package frc.robot;
 import frc.robot.Constants.DriveConstants;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
-// import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.net.PortForwarder;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
     public static final CTREConfigs ctreConfigs = new CTREConfigs();
-
 
     private Command m_autonomousCommand;
 
@@ -49,17 +46,18 @@ public class Robot extends TimedRobot {
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
 
-        PortForwarder.add(5800, "photonvision-a.local", 5800);
-        PortForwarder.add(5800, "photonvision-b.local", 5800);
+        // camera port forwards
+        // PortForwarder.add(5800, "photonvision-a.local", 5800);
+        // PortForwarder.add(5800, "photonvision-b.local", 5800);
 
-        PortForwarder.add(1181, "photonvision-a.local", 1181);
-        PortForwarder.add(1181, "photonvision-b.local", 1181);
+        // PortForwarder.add(1181, "photonvision-a.local", 1181);
+        // PortForwarder.add(1181, "photonvision-b.local", 1181);
 
-        PortForwarder.add(1182, "photonvision-a.local", 1182);
-        PortForwarder.add(1182, "photonvision-b.local", 1182);
+        // PortForwarder.add(1182, "photonvision-a.local", 1182);
+        // PortForwarder.add(1182, "photonvision-b.local", 1182);
 
         m_timerDisabled = new Timer();
-        //PathfindingCommand.warmupCommand().schedule();
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     /**
@@ -108,24 +106,21 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-        // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-        // // schedule the autonomous command (example)
-        // if (m_autonomousCommand != null) {
-        //     m_autonomousCommand.schedule();
-        // }
+        // schedule the autonomous command (example)
+        if (m_autonomousCommand != null) {
+            m_autonomousCommand.schedule();
+        }
     }
 
     /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {
-        m_robotContainer.limelightControl();
     }
 
     @Override
     public void teleopInit() {
-
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
@@ -144,7 +139,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
     }
