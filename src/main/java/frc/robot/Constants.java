@@ -28,6 +28,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Time;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
@@ -54,12 +55,13 @@ public final class Constants {
                 .KrakenX60(COTSTalonFXSwerveConstants.SDS.MK4i.driveRatios.L2);
 
         /* Drivetrain Constants */
-        // TODO: adjust with real robot dimensions
-        public static final double trackWidth = 0.57785; // meters
-        public static final double wheelBase = 0.66675; // meters
+        public static final double trackWidth = Units.inchesToMeters(20.75); 
+        public static final double wheelBase = Units.inchesToMeters(23.75); 
         public static final double wheelCircumference = chosenModule.wheelCircumference;
-        public static final double kRobotWidth = 0.884; // meters
-        public static final double kRobotLength = 0.973; // meters
+
+        // with bumpers
+        public static final double kRobotWidth = Units.inchesToMeters(35.69); 
+        public static final double kRobotLength = Units.inchesToMeters(32.63); 
 
         /*
          * Swerve Kinematics
