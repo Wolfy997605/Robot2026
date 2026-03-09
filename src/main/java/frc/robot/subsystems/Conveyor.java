@@ -14,11 +14,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Conveyor extends SubsystemBase {
     // initialisation du moteur et de l'encodeur
     private SparkMax ConvMotor  = new SparkMax(ConveyorConstants.conveyorMotorId, MotorType.kBrushless);
+
+    //moteur pour le leftIntake (celui du bas)
     private SparkMax leftIntakeMotor = new SparkMax(ConveyorConstants.leftIntakeMotorId, MotorType.kBrushless);
     private RelativeEncoder convEncoder = ConvMotor.getEncoder();
     private SparkMaxConfig currentConfig;
 
-
+    // constructeur du sous-système
     public Conveyor() {
         leftIntakeMotor.setCANTimeout(Constants.kCANTimeout);
         leftIntakeMotor.setPeriodicFrameTimeout(Constants.kPeriodicFrameTimeout);
