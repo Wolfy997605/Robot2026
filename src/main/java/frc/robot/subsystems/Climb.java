@@ -91,6 +91,14 @@ public class Climb extends SubsystemBase {
         climbMotor.setVoltage(voltage);
     }
 
+    /**
+     * 
+     * @param lvl la position désirée du Climb (stowed, Lvl1, Lvl2, Lvl3)
+     * @param maxSpeed la vitesse maximale du mouvement
+     * @param maxAcceleration l'accélération maximale du mouvement
+     * @param closedLoopSlot le slot de contrôle à utiliser pour le PID (généralement kSlot0)
+     * @return la commande qui exécute ce mouvement
+     */
     public Command goToPosition(climbLvl lvl, double maxSpeed, double maxAcceleration,
             ClosedLoopSlot closedLoopSlot) {
         return goToPosition(lvl.position, maxSpeed, maxAcceleration, closedLoopSlot);
