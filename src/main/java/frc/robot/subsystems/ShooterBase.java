@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterBase extends SubsystemBase {
     // initialisation du moteur et de l'encodeur
-    private SparkMax ConvMotor  = new SparkMax(ConveyorConstants.conveyorMotorId, MotorType.kBrushless);
-    private SparkMax leftIntakeMotor = new SparkMax(ConveyorConstants.leftIntakeMotorId, MotorType.kBrushless);
-    private RelativeEncoder convEncoder = ConvMotor.getEncoder();
+    private SparkMax shootMotor  = new SparkMax(ShooterBaseConstants.shooterBaseMotorId, MotorType.kBrushless);
+    private RelativeEncoder shootEncoder = shootMotor.getEncoder();
     private SparkMaxConfig currentConfig;
     
+    // constructeur du sous-système
     public ShooterBase() {
 
     }
