@@ -20,12 +20,8 @@ public class Conveyor extends SubsystemBase {
 
 
     public Conveyor() {
-        // configutation du moteur (le temp d'attente de réponse du moteur)
-        ConvMotor.setCANTimeout(Constants.kCANTimeout);
-        ConvMotor.setPeriodicFrameTimeout(Constants.kPeriodicFrameTimeout);
         leftIntakeMotor.setCANTimeout(Constants.kCANTimeout);
         leftIntakeMotor.setPeriodicFrameTimeout(Constants.kPeriodicFrameTimeout);
-
         currentConfig = new SparkMaxConfig();
         currentConfig.idleMode(SparkMaxConfig.IdleMode.kBrake);
         currentConfig.inverted(false);
@@ -39,13 +35,13 @@ public class Conveyor extends SubsystemBase {
     }
 
     // fait tourner les roues du convoyeur pour faire entrer les balles
-    public void converyorWheelsIn(){
+    public void conveyorWheelsIn(){
         ConvMotor.set(ConveyorConstants.kInSpeed);
         leftIntakeMotor.set(ConveyorConstants.kInSpeed);
     }
 
     // fait tourner les roues du convoyeur pour faire sortir les balles
-    public void conveyorWheelsOut(){
+    public void ConveyorWheelsOut(){
         ConvMotor.set(ConveyorConstants.kOutSpeed);
         leftIntakeMotor.set(ConveyorConstants.kOutSpeed);
     }
