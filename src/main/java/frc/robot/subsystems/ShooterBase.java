@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterBase extends SubsystemBase {
     // initialisation du moteur et de l'encodeur
-    private SparkMax ShooterBaseMotor  = new SparkMax(ShooterBaseConstants.ShooterBaseMotorId, MotorType.kBrushless);
+    private SparkMax ShooterBaseMotor  = new SparkMax(ShooterBaseConstants.shooterBaseMotorId, MotorType.kBrushless);
     private RelativeEncoder ShooterBaseEncoder = ShooterBaseMotor.getEncoder();
     private SparkMaxConfig currentConfig;
     
@@ -40,7 +40,7 @@ public class ShooterBase extends SubsystemBase {
     }
 
     public boolean isShooterBaseStopped() {
-        return Math.abs(convEncoder.getVelocity()) < ShooterBaseConstants.kThresholdMotorStopped;
+        return Math.abs(ShooterBaseEncoder.getVelocity()) < ShooterBaseConstants.kThresholdMotorStopped;
     }
 
     @Override
