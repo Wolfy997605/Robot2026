@@ -1,0 +1,30 @@
+package frc.robot.subsystems;
+
+import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ShooterBaseConstants;
+import frc.robot.Constants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+public class ShooterBase extends SubsystemBase {
+    // initialisation du moteur et de l'encodeur
+    private SparkMax ConvMotor  = new SparkMax(ConveyorConstants.conveyorMotorId, MotorType.kBrushless);
+    private SparkMax leftIntakeMotor = new SparkMax(ConveyorConstants.leftIntakeMotorId, MotorType.kBrushless);
+    private RelativeEncoder convEncoder = ConvMotor.getEncoder();
+    private SparkMaxConfig currentConfig;
+    
+    public ShooterBase() {
+
+    }
+
+    @Override
+    public void periodic() {
+        
+    }
+
+}

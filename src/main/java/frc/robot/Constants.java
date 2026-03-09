@@ -272,6 +272,15 @@ public final class Constants {
     // constantes pour la base du shooter
     public static final class ShooterBaseConstants {
         public static final int shooterBaseMotorId = 12;
+        public static final double maxVelocity = 40; 
+        public static final double maxAcceleration = 60;
+        public static final double kVoltageCompensation = 11;
+        public static final int kCurrentLimit = 50;
+
+        public static final double kInSpeed = 0.8;
+        public static final double kOutSpeed = -1;
+        
+        public static final double kThresholdMotorStopped = 500;
     }
 
     // constantes pour les tourelles
